@@ -1,0 +1,22 @@
+# Frameworks de Orquestación (Obligatorios)
+langchain==0.1.16
+langchain-community==0.0.34
+langchain-core>=0.1.46
+langgraph>=0.0.39
+
+# Integración con Modelos (LLM y Embeddings)
+langchain-google-genai==1.0.3
+langchain-huggingface==0.0.1
+sentence-transformers==2.7.0
+
+# Base de Datos Vectorial (Vectorstore)
+faiss-cpu==1.8.0
+
+# Procesamiento de Documentos (Loaders)
+pypdf==4.2.0
+docx2txt==0.8
+pandas==2.2.2
+
+# Generación de Reportes y Plantillas
+Jinja2==3.1.3
+fpdf2==2.7.9
