@@ -1,0 +1,44 @@
+# ==========================================
+# .gitignore para Proyecto ConsulTech Analytics
+# ==========================================
+
+# 1. Claves y Credenciales (¡CRÍTICO!)
+.env
+.env.*
+secrets.json
+credentials.json
+api_keys.json
+
+# 2. Caché de Python y Archivos Compilados
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# 3. Checkpoints de Jupyter Notebook y Google Colab
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# 4. Bases de Datos Vectoriales Locales (FAISS / ChromaDB)
+# Evita subir los índices pesados generados por los embeddings
+vector_store/
+faiss_index/
+chroma_db/
+*.sqlite3
+*.db
+
+# 5. Entornos Virtuales (Por si trabajan localmente después)
+venv/
+env/
+.venv/
+Pipfile.lock
+
+# 6. Archivos del Sistema Operativo
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# 7. Archivos Temporales de Descarga/Procesamiento
+temp/
+tmp/
+*.log
