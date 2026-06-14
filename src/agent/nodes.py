@@ -3,6 +3,7 @@ from src.agent.state import AgentState
 from src.processors.document_loader import load_document
 from src.processors.classifier import classify_document, create_vectorstore
 from src.generators.summarizer import generate_summary
+from src.generators.pdf_generator import generate_pdf_report
 
 logger = logging.getLogger(__name__)
 
@@ -73,3 +74,33 @@ def summarize_node(state: AgentState) -> AgentState:
     
     # Guardamos el resultado en la nueva variable de la memoria
     return {"summary": resumen_generado, "status": "resumido"}
+
+def generate_pdf_node(state: AgentState) -> AgentState:
+    """Nodo Fase 5: Consolida los análisis en memoria y genera el PDF final"""
+    logger.info("--- NODO INICIADO: Generando PDF Consolidado ---")
+    
+    # 1. Extraer los datos del documento actual
+    file_path = state.get("file_path", "Desconocido")
+    doc_class = state.get("document_class", "general")
+    summary = state.get("summary", "")
+    
+    # 2. Formatear el análisis actual como diccionario
+    analisis_actual = [{
+        "archivo": os.path.basename(file_path),
+        "clase": doc_class,
+        "resumen": summary
+    }]
+    
+    # (Al retornar esto, LangGraph usará operator.add para sumarlo a la lista global 'analyses')
+    
+    # 3. Seleccionamos la plantilla de tu compañero según el tipo de documento
+    template_name = "plantilla_cientifica.jinja2" if doc_class == "cientifico" else "plantilla_general.jinja2"
+    
+    # 4. Generamos el PDF (Pasamos el análisis actual, o podrías pasar toda la lista de state.get('analyses'))
+    exito = generate_pdf_report(analisis_actual, template_name)
+    
+    if exito:
+        logger.info("--- NODO FINALIZADO: PDF Generado Exitosamente ---")
+        return {"analyses": analisis_actual, "status": "reporte_generado"}
+    else:
+        return {"analyses": analisis_actual, "status": "error_pdf"}
