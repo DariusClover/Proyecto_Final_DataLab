@@ -22,9 +22,9 @@ def get_llm(temperature=0.0, usar_gemma=True):
     if usar_gemma:
         nombre_modelo = "gemma-2-27b-it"
     else:
-        nombre_modelo = "gemini-3.5-flash"
+        nombre_modelo = "gemini-flash-latest"
         
-    logger.info(f"Conectando al "cerebro": Instanciando modelo {nombre_modelo} con temp={temperature}")
+    logger.info(f"Conectando al cerebro: Instanciando modelo {nombre_modelo} con temp={temperature}")
     
     return ChatGoogleGenerativeAI(
         model=nombre_modelo,
