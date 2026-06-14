@@ -1,3 +1,11 @@
+import logging
+from typing import List
+from langchain_core.documents import Document
+from langchain_core.prompts import PromptTemplate
+from src.utils.config import get_llm
+
+logger = logging.getLogger(__name__)
+
 def generate_summary(documents: List[Document], document_class: str) -> str:
     """
     Genera un resumen adaptado al tipo de documento utilizando Gemini.
