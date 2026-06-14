@@ -2,6 +2,7 @@ import logging
 from src.agent.state import AgentState
 from src.processors.document_loader import load_document
 from src.processors.classifier import classify_document, create_vectorstore
+from src.generators.summarizer import generate_summary
 
 logger = logging.getLogger(__name__)
 
@@ -53,3 +54,22 @@ def vectorize_document_node(state: AgentState) -> AgentState:
         return {"status": "vectorizado"}
     else:
         return {"status": "error_vectorizacion"}
+
+def summarize_node(state: AgentState) -> AgentState:
+    """Nodo Fase 3: Genera el resumen adaptado al tipo de documento"""
+    logger.info("--- NODO INICIADO: Generando Resumen ---")
+    
+    docs = state.get("documents", [])
+    doc_class = state.get("document_class", "general")
+    
+    if not docs:
+        logger.error("No hay documentos para resumir.")
+        return {"status": "error_sin_documentos"}
+        
+    # Invocamos la función mágica de tu compañero pasándole los parámetros
+    resumen_generado = generate_summary(docs, doc_class)
+    
+    logger.info("--- NODO FINALIZADO: Resumen completado ---")
+    
+    # Guardamos el resultado en la nueva variable de la memoria
+    return {"summary": resumen_generado, "status": "resumido"}
