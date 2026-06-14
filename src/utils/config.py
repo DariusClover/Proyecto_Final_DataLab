@@ -15,7 +15,7 @@ def get_llm(temperature=0.0):
     Inicializa y retorna el modelo de Gemini.
     """
     return ChatGoogleGenerativeAI(
-        model="gemini-flash",
+        model="gemini-flash-latest",
         temperature=temperature,
         google_api_key=api_key
     )
