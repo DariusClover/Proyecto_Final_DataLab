@@ -3,6 +3,9 @@ from typing import List
 from langchain_core.prompts import PromptTemplate
 from langchain_core.documents import Document
 from src.utils.config import get_llm
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +68,35 @@ def classify_document(documents: List[Document]) -> str:
         logger.error(f"Fallo durante la clasificación con Gemini. Error: {str(e)}")
         return "general"
 
-# -----------------------------------------------------------------------------------------
-# A partir de aquí vas tú we.
-# Él deberá agregar debajo de esta línea su función para vectorizar los documentos con FAISS.
-# -----------------------------------------------------------------------------------------
+def create_vectorstore(documents: List[Document], save_path: str = "vector_store/faiss_index") -> bool:
+    """
+    Toma una lista de documentos LangChain, los divide en fragmentos (chunks) 
+    y los almacena en una base de datos vectorial FAISS local.
+    """
+    if not documents:
+        logger.warning("No hay documentos para vectorizar.")
+        return False
+
+    try:
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=1000,
+            chunk_overlap=150,
+            separators=["\n\n", "\n", ".", " ", ""]
+        )
+        chunks = text_splitter.split_documents(documents)
+        logger.info(f"Documento dividido exitosamente en {len(chunks)} fragmentos.")
+
+        # Este modelo estadístico corre perfectamente en tu máquina local
+        embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+
+        vectorstore = FAISS.from_documents(chunks, embeddings)
+
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        vectorstore.save_local(save_path)
+        logger.info(f"Vectorstore FAISS guardado de forma segura en: {save_path}")
+
+        return True
+
+    except Exception as e:
+        logger.error(f"Fallo crítico al crear el vectorstore: {str(e)}")
+        return False
