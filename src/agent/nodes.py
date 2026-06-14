@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 def process_document_node(state: AgentState) -> AgentState:
     """
-    Nodo inicial de la Fase 1.
+    Nodo para procesar un documento.
     Toma la ruta del archivo del estado, extrae el texto y lo guarda.
     """
     file_path = state.get("file_path", "")
