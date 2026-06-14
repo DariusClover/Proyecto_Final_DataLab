@@ -4,6 +4,7 @@ from src.agent.state import AgentState
 from src.processors.document_loader import load_document
 from src.processors.classifier import classify_document
 from src.generators.summarizer import generate_summary
+import time
 from src.generators.pdf_generator import generate_pdf_report
 
 logger = logging.getLogger(__name__)
@@ -55,6 +56,11 @@ def analyze_document_batch_node(state: AgentState) -> AgentState:
                 "summary": f"No se pudo analizar el archivo debido a un error técnico: {str(e)}",
                 "status": "fallido"
             })
+
+            time.sleep(15)
+            
+
+
 
     # Seteamos las variables consolidadas en el estado maestro
     state["analyses"] = analyses_accumulated
