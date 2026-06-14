@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Consolidado de Literatura Científica</title>
+</head>
+<body style="font-family: 'Times New Roman', serif; color: #111111; margin: 40px; line-height: 1.6;">
+    <h1 style="color: #4b5320; text-align: center; font-variant: small-caps;">ConsulTech Analytics</h1>
+    <h3 style="color: #333333; text-align: center; margin-top: -10px; font-style: italic;">Compendio Avanzado de Literatura Científica</h3>
+    <hr style="border-top: 2px solid #4b5320;">
+    
+    <p><b>Fecha de Consolidación:</b> 14 de junio de 2026</p>
+    <p><b>Volumen de Corpus Indexado:</b> {{ analyses|length }} documento(s) académico(s)</p>
+    
+    <br>
+    <h2 style="color: #111; border-bottom: 1px solid #4b5320; padding-bottom: 5px;">Sección I: Compendio de Extracciones Estructuradas</h2>
+    
+    {% for item in analyses %}
+    <div style="margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px dashed #cccccc;">
+        <h3 style="color: #4b5320; margin-bottom: 5px;">Documento Fuente: {{ item.file_name }}</h3>
+        <p style="font-size: 12px; color: #555; margin-top: 0;">Clasificación: Académico/Científico | Estado de Indexación: {{ item.status }}</p>
+        
+        <div style="white-space: pre-line; padding-left: 15px; border-left: 2px solid #4b5320;">
+            {{ item.summary }}
+        </div>
+    </div>
+    {% endfor %}
+    
+    <br>
+    <hr style="border-top: 1px solid #4b5320;">
+    <p style="font-size: 11px; text-align: center; font-style: italic; color: #444;">
+        Gobernanza de Datos y Reproducción Científica Exclusiva - ConsulTech Analytics 2026
+    </p>
+</body>
+</html>

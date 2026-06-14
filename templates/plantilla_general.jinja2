@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Consolidado de Reportes Corporativos</title>
+</head>
+<body style="font-family: Arial, sans-serif; color: #333333; margin: 30px;">
+    <h1 style="color: #0056b3; text-align: center;">ConsulTech Analytics</h1>
+    <h3 style="color: #555555; text-align: center; margin-top: -10px;">Reporte Ejecutivo Consolidado Multi-Documento</h3>
+    <hr style="border-top: 2px solid #0056b3;">
+    
+    <p><b>Fecha de Emisión:</b> 14 de junio de 2026</p>
+    <p><b>Total Documentos Procesados:</b> {{ analyses|length }}</p>
+    
+    <br>
+    <h2 style="color: #2c3e50;">Índice de Documentos Analizados</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <thead>
+            <tr style="background-color: #0056b3; color: white;">
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Nombre del Archivo</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Clasificación</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: center;">Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in analyses %}
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">{{ item.file_name }}</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">General</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center; color: green;">{{ item.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <h2 style="color: #2c3e50;">Análisis Detallado y Puntos de Acción</h2>
+    {% for item in analyses %}
+    <div style="margin-bottom: 30px; background-color: #f8f9fa; padding: 20px; border-left: 5px solid #0056b3; border-radius: 4px;">
+        <h4 style="color: #0056b3; margin-top: 0;">Origen: {{ item.file_name }}</h4>
+        <div style="white-space: pre-line; line-height: 1.5;">
+            {{ item.summary }}
+        </div>
+    </div>
+    {% endfor %}
+    
+    <br><br>
+    <hr>
+    <p style="font-size: 10px; text-align: center; color: #777;">
+        Este documento es un entregable oficial consolidado automáticamente por el Agente de IA de ConsulTech Analytics.
+    </p>
+</body>
+</html>
