@@ -1,33 +1,17 @@
 from langgraph.graph import StateGraph, START, END
 from src.agent.state import AgentState
-
-# Importamos todos los nodos, incluyendo el nuevo
-from src.agent.nodes import (
-    process_document_node, 
-    classify_node, 
-    vectorize_document_node, 
-    summarize_node,
-    generate_pdf_node # <-- Nueva importación
-)
+from src.agent.nodes import analyze_document_batch_node, generate_pdf_report_node
 
 def build_agent_graph():
     workflow = StateGraph(AgentState)
     
-    # Nodos
-    workflow.add_node("loader", process_document_node)
-    workflow.add_node("classifier", classify_node)
-    workflow.add_node("vectorize", vectorize_document_node)
-    workflow.add_node("summarize", summarize_node)
-    workflow.add_node("pdf_generator", generate_pdf_node) # <-- Nuevo nodo
+    # Definición de macro-nodos robustos
+    workflow.add_node("analyze_batch", analyze_document_batch_node)
+    workflow.add_node("generate_pdf", generate_pdf_report_node)
     
-    # Aristas
-    workflow.add_edge(START, "loader")
-    workflow.add_edge("loader", "classifier")
-    workflow.add_edge("classifier", "vectorize")
-    workflow.add_edge("vectorize", "summarize")
-    workflow.add_edge("summarize", "pdf_generator")       # <-- Del resumen pasa al PDF
-    workflow.add_edge("pdf_generator", END)               # <-- Finaliza el flujo
+    # Flujo de ejecución lineal
+    workflow.add_edge(START, "analyze_batch")
+    workflow.add_edge("analyze_batch", "generate_pdf")
+    workflow.add_edge("generate_pdf", END)
     
-    app = workflow.compile()
-    
-    return app
+    return workflow.compile()
