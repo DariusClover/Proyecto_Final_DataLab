@@ -56,8 +56,20 @@ def generate_summary(documents: List[Document], document_class: str) -> str:
     try:
         logger.info(f"Generando resumen estructurado para documento clasificado como: '{document_class}'")
         response = chain.invoke({"texto": texto_completo})
+        
+        # Corrección de tipo: Validar si la respuesta viene empaquetada como lista
+        content = response.content
+        if isinstance(content, list):
+            text_parts = []
+            for part in content:
+                if isinstance(part, str):
+                    text_parts.append(part)
+                elif isinstance(part, dict) and "text" in part:
+                    text_parts.append(part["text"])
+            content = "".join(text_parts)
+
         logger.info("Resumen generado exitosamente.")
-        return response.content.strip()
+        return content.strip()
 
     except Exception as e:
         logger.error(f"Fallo durante la generación del resumen con Gemini. Error: {str(e)}")

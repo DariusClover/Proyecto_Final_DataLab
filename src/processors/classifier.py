@@ -56,8 +56,19 @@ def classify_document(documents: List[Document]) -> str:
         logger.info("Enviando muestra de texto a Gemini para determinar tipo de documento...")
         response = chain.invoke({"texto": sample_text})
         
-        # Limpieza estricta de la respuesta del LLM para evitar errores en las aristas condicionales
-        clasificacion = response.content.strip().lower()
+        # Corrección de tipo: Validar si la respuesta viene empaquetada como lista
+        content = response.content
+        if isinstance(content, list):
+            text_parts = []
+            for part in content:
+                if isinstance(part, str):
+                    text_parts.append(part)
+                elif isinstance(part, dict) and "text" in part:
+                    text_parts.append(part["text"])
+            content = "".join(text_parts)
+            
+        # Limpieza estricta de la respuesta del LLM
+        clasificacion = content.strip().lower()
         
         if clasificacion not in ['cientifico', 'general']:
             logger.warning(f"Respuesta ambigua de Gemini: '{clasificacion}'. Se clasifica como 'general' por defecto.")
@@ -65,6 +76,10 @@ def classify_document(documents: List[Document]) -> str:
             
         logger.info(f"Clasificación exitosa. Tipo de documento detectado: {clasificacion}")
         return clasificacion
+
+    except Exception as e:
+        logger.error(f"Fallo durante la clasificación con Gemini. Error: {str(e)}")
+        return "general"
 
     except Exception as e:
         # Manejo de errores exigido por la rúbrica (Ej: caída de API, límite de cuota)
